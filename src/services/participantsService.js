@@ -16,16 +16,32 @@ const REDIS_KEY = "participants";
 const REDIS_CACHE = 3600;
 
 export const getParticipants = async (req, res) => {
-  const resultFromRedis = await getDataFromRedis(REDIS_KEY);
-  if (resultFromRedis) {
-    console.log("Found data from Redis", REDIS_KEY);
-    res.status(200).json(resultFromRedis);
-    return;
+  try {
+    // Check for cached data in Redis
+    const resultFromRedis = await getDataFromRedis(REDIS_KEY);
+    if (resultFromRedis) {
+      console.log("Found data from Redis:", REDIS_KEY);
+      return res.status(200).json(resultFromRedis);
+    }
+
+    // If no data in Redis, fetch from the database
+    console.log("Fetching data from database");
+    const result = await getAllParticipants();
+
+    // If no participants are found, respond with a 404
+    if (!result || result.length === 0) {
+      return res.status(404).json({ message: "No participants found" });
+    }
+
+    // Store the result in Redis for future requests
+    await setDataToRedis(REDIS_KEY, result, REDIS_CACHE);
+
+    // Respond with the fetched data
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Error fetching participants:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
-  const result = await getAllParticipants();
-  console.log("Getting data from database");
-  await setDataToRedis(REDIS_KEY, result, REDIS_CACHE);
-  res.status(200).json(result);
 };
 
 export const getParticipantById = async (req, res) => {
@@ -68,24 +84,56 @@ export const createParticipant = async (req, res) => {
 };
 
 export const updateParticipant = async (req, res) => {
-  const id = req?.params?.id ?? "";
-  const { name, age, role } = req.body;
-  const result = await updateParticipantById(id, name, age, role);
-  if (!result) {
-    res.status(404).json({ message: "Participant not found" });
-    return;
+  try {
+    const id = req.params?.id;
+    const { name, age, role } = req.body;
+
+    // Validate request data
+    if (!id || !name || !age || !role) {
+      return res.status(400).json({ message: "Invalid input data" });
+    }
+
+    // Update participant in the database
+    const result = await updateParticipantById(id, name, age, role);
+
+    if (!result) {
+      return res.status(404).json({ message: "Participant not found" });
+    }
+
+    // Invalidate Redis cache
+    await invalidKey(REDIS_KEY);
+
+    // Respond with the updated participant data
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Error updating participant:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
-  await invalidKey(REDIS_KEY);
-  res.status(200).json(result);
 };
 
 export const deleteParticipant = async (req, res) => {
-  const id = req?.params?.id ?? "";
-  const result = await deleteParticipantById(id);
-  if (!result) {
-    res.status(404).json({ message: "Participant not found" });
-    return;
+  try {
+    const id = req.params?.id;
+
+    // Validate request data
+    if (!id) {
+      return res.status(400).json({ message: "Participant ID is required" });
+    }
+
+    // Delete participant in the database
+    const result = await deleteParticipantById(id);
+
+    if (!result) {
+      return res.status(404).json({ message: "Participant not found" });
+    }
+
+    // Invalidate Redis cache
+    await invalidKey(REDIS_KEY);
+
+    // Respond with no content
+    return res.status(204).send();
+  } catch (error) {
+    console.error("Error deleting participant:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
-  await invalidKey(REDIS_KEY);
-  res.status(204).json(result);
 };
