@@ -5,4 +5,5 @@ export const PARTICIPANTS_ROLE = [
   "Director",
   "Musician",
   "Writer",
+  "Cinematographer",
 ];
