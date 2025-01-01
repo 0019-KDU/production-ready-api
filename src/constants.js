@@ -7,3 +7,26 @@ export const PARTICIPANTS_ROLE = [
   "Writer",
   "Cinematographer",
 ];
+
+export const MOVIE_GENRE = [
+  "Action",
+  "Adventure",
+  "Comedy",
+  "Drama",
+  "Fantasy",
+  "Horror",
+  "Mystery",
+  "Romance",
+  "Science Fiction (Sci-Fi)",
+  "Thriller",
+  "Western",
+  "Crime",
+  "Documentary",
+  "Family",
+  "Animation",
+  "Musical",
+  "War",
+  "Historical",
+  "Sports",
+  "Biography",
+];
