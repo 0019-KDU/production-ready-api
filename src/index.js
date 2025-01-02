@@ -4,6 +4,7 @@ import { DB_NAME } from "./constants.js";
 
 import participants from "./controllers/participantController.js";
 import movies from "./controllers/movieController.js";
+import users from "./controllers/userController.js";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.get("/ping", (req, res) => {
 });
 app.use("/participants", participants);
 app.use("/movies", movies);
+app.use("/auth", users);
 
 await connect(DB_NAME);
 

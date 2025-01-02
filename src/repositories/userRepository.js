@@ -1,17 +1,24 @@
 import User from "./schemas/userSchema.js";
 
 export const getUserById = async (userId) => {
-  const user = await User.findById(userId);
-  if (!user) {
-    console.log("User not found", userId);
+  try {
+    const user = await User.findOne({ userId }); // Use findOne with a query object
+    return user; // Returns user object or null if not found
+  } catch (error) {
+    console.error("Error fetching user by ID:", error);
+    throw error; // Re-throw unexpected errors
   }
-  return user;
 };
 
 export const createUserById = async (name, userId, password) => {
-  const user = new User({ name, userId, password });
-  await user.save();
-  return user;
+  try {
+    const user = new User({ name, userId, password });
+    await user.save();
+    return user;
+  } catch (error) {
+    console.error("Error creating user:", error);
+    throw error;
+  }
 };
 
 export const validateUserPassword = async (userId, password) => {
