@@ -16,17 +16,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(removeResHeaders);
 
-app.get(
-  "/ping",
-  (req, res, next) => {
-    console.log("inside middleware beofore route handler");
-    next();
-  },
-  (req, res) => {
-    console.log("inside ping method route handler");
-    res.status(200).json({ message: "ping" });
-  }
-);
+app.get("/ping", (req, res) => {
+  console.log("inside ping method route handler");
+  res.status(200).json({ message: "ping" });
+});
 app.use("/participants", participants);
 app.use("/movies", movies);
 

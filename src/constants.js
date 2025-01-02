@@ -30,3 +30,7 @@ export const MOVIE_GENRE = [
   "Sports",
   "Biography",
 ];
+
+export const USER_ROLE = ["Guest", "Moderator", "Admin"];
+
+export const DEFAULT_USER_ROLE = USER_ROLE[0];
