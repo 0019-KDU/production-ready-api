@@ -12,6 +12,8 @@ import {
   invalidKey,
 } from "../lib/redisHelper.js";
 
+import { validationResult } from "express-validator";
+
 const REDIS_KEY = "movies";
 const REDIS_CACHE = 3600;
 
@@ -53,7 +55,7 @@ export const createMovieByName = async (req, res) => {
   try {
     console.log("Received movie object:", req.body);
 
-    const movieObj = req.body;
+    const movieObj = req?.body ?? {};
     const result = await createMovie(movieObj);
 
     // Invalidate the Redis key if required
