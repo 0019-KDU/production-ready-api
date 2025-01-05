@@ -11,6 +11,7 @@ import {
   setDataToRedis,
   invalidKey,
 } from "../lib/redisHelper.js";
+import { logMsg } from "../lib/logProducer.js";
 
 const REDIS_KEY = "participants";
 const REDIS_CACHE = 3600;
@@ -77,10 +78,12 @@ export const getParticipantById = async (req, res) => {
 };
 
 export const createParticipant = async (req, res) => {
+  const logId = req?.logId ?? "";
   const { name, age, role } = req.body;
-  const result = await createParticipantByName(name, age, role);
-  await invalidKey(REDIS_KEY);
-  res.status(201).json(result);
+  logMsg(logId, "inside createParticipant method", { name, age, role });
+  const result = await createParticipantByName(name, age, role, logId);
+  await invalidKey(REDIS_KEY, logId);
+  res.status(201).json(result, logId);
 };
 
 export const updateParticipant = async (req, res) => {

@@ -1,4 +1,5 @@
 import redisClient from "../config/redis.js";
+import { logMsg } from "./logProducer.js";
 
 export const getDataFromRedis = async (key) => {
   const cachedData = await redisClient.get(key);
@@ -10,6 +11,7 @@ export const setDataToRedis = async (key, data, cacheDuration) => {
   return;
 };
 
-export const invalidKey = async (key) => {
+export const invalidKey = async (key, logId) => {
+  logMsg(logId, "Invalid redis key: " + key, {});
   return await redisClient.del(key);
 };

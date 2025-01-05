@@ -4,7 +4,7 @@ const rolePermission = {
   admin: ["read", "create", "update", "delete"],
 };
 
-export default checkPermission = (requiredPermission) => (req, res, next) => {
+export const checkPermission = (requiredPermission) => (req, res, next) => {
   const userRole = req?.user?.role ?? "";
   if (
     rolePermission[userRole?.toLowerCase()].includes(
