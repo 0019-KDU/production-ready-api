@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "log": "node src/logService/index.js",
+    "devLog": "nodemon src/logService/index.js"
   },
   "author": "chiradev",
   "license": "ISC",
@@ -19,6 +21,7 @@
     "ioredis": "^5.4.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.2",
+    "node-cron": "^3.0.3",
     "tiny-uid": "^1.1.2"
   },
   "devDependencies": {
