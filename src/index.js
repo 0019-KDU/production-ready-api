@@ -5,6 +5,7 @@ import { DB_NAME } from "./constants.js";
 import participants from "./controllers/participantController.js";
 import movies from "./controllers/movieController.js";
 import users from "./controllers/userController.js";
+import { checkHealthStatus } from "./services/healthService.js";
 
 dotenv.config();
 
@@ -25,6 +26,8 @@ app.use((req, res, next) => {
   req.logId = uid(7);
   next();
 });
+
+app.get("/healthCheck", checkHealthStatus);
 
 app.get("/ping", (req, res) => {
   const logId = req?.logId ?? "";
