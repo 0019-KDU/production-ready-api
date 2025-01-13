@@ -1,16 +1,16 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const connect = async (dbName) => {
   try {
-    let connectionString = process.env.MONGO_URI || "";
-    if (connectionString === "") {
+    let connectionString = process.env.MONGO_URI || '';
+    if (connectionString === '') {
       throw new Error(
-        "No MongoDB connection string found. Please set MONGO_URI environment variable."
+        'No MongoDB connection string found. Please set MONGO_URI environment variable.'
       );
     }
 
     // Replace {1} with the database name in the connection string
-    connectionString = connectionString.replace("{1}", dbName);
+    connectionString = connectionString.replace('{1}', dbName);
 
     // Connect to MongoDB
     await mongoose.connect(connectionString);

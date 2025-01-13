@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { MOVIE_GENRE } from "../../constants.js";
+import mongoose from 'mongoose';
+import { MOVIE_GENRE } from '../../constants.js';
 
 const moviesSchema = new mongoose.Schema({
   movieName: {
@@ -29,20 +29,20 @@ const moviesSchema = new mongoose.Schema({
 
   producer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Participants",
+    ref: 'Participants',
   },
   director: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Participants",
+    ref: 'Participants',
   },
   actors: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Participants",
+      ref: 'Participants',
     },
   ],
 });
 
-const Movies = mongoose.model("Movie", moviesSchema);
+const Movies = mongoose.model('Movie', moviesSchema);
 
 export default Movies;

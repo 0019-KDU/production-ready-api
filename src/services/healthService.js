@@ -1,24 +1,24 @@
-import mongoose from "mongoose";
-import { DB_NAME } from "../constants.js";
-import { Redis } from "ioredis";
-import amqp from "amqplib";
+import mongoose from 'mongoose';
+import { DB_NAME } from '../constants.js';
+import { Redis } from 'ioredis';
+import amqp from 'amqplib';
 
 export const checkHealthStatus = async (req, res) => {
   const healthStatus = {
     mongodb: {
-      status: "UNKNOWN",
+      status: 'UNKNOWN',
       latency: null,
       version: null,
       error: null,
     },
     redis: {
-      status: "UNKNOWN",
+      status: 'UNKNOWN',
       latency: null,
       uptime: null,
       error: null,
     },
     rabbitmq: {
-      status: "UNKNOWN",
+      status: 'UNKNOWN',
       latency: null,
       version: null,
       error: null,
@@ -31,13 +31,13 @@ export const checkHealthStatus = async (req, res) => {
   try {
     const mongoStart = Date.now();
     const connection = await mongoose.connect(
-      process.env.MONGO_URI.replace("{0}", DB_NAME)
+      process.env.MONGO_URI.replace('{0}', DB_NAME)
     );
-    healthStatus.mongodb.status = "OK";
+    healthStatus.mongodb.status = 'OK';
     healthStatus.mongodb.latency = Date.now() - mongoStart;
     healthStatus.mongodb.version = connection.version;
   } catch (error) {
-    healthStatus.mongodb.status = "DOWN";
+    healthStatus.mongodb.status = 'DOWN';
     healthStatus.mongodb.error = error.message;
     overallHealthStatus = 503;
   }
@@ -50,17 +50,17 @@ export const checkHealthStatus = async (req, res) => {
       port: process.env.REDIS_PORT,
     });
     const pingResult = await redisClient.ping();
-    const info = await redisClient.info("server");
-    if (pingResult === "PONG") {
-      healthStatus.redis.status = "OK";
+    const info = await redisClient.info('server');
+    if (pingResult === 'PONG') {
+      healthStatus.redis.status = 'OK';
     } else {
-      throw new Error("Redis ping failed");
+      throw new Error('Redis ping failed');
     }
     healthStatus.redis.latency = Date.now() - redisStart;
     healthStatus.redis.uptime = info.match(/uptime_in_seconds:(\d+)/)?.[1];
     await redisClient.quit(); // Graceful cleanup
   } catch (error) {
-    healthStatus.redis.status = "DOWN";
+    healthStatus.redis.status = 'DOWN';
     healthStatus.redis.error = error.message;
     overallHealthStatus = 503;
   }
@@ -70,21 +70,21 @@ export const checkHealthStatus = async (req, res) => {
     const rabbitStart = Date.now();
     const connection = await amqp.connect(process.env.RABBITMQ_URI);
     const serverProperties = connection.serverProperties || {};
-    healthStatus.rabbitmq.status = "OK";
+    healthStatus.rabbitmq.status = 'OK';
     healthStatus.rabbitmq.latency = Date.now() - rabbitStart;
-    healthStatus.rabbitmq.version = serverProperties.version || "Unknown";
+    healthStatus.rabbitmq.version = serverProperties.version || 'Unknown';
     await connection.close();
   } catch (error) {
-    healthStatus.rabbitmq.status = "DOWN";
+    healthStatus.rabbitmq.status = 'DOWN';
     healthStatus.rabbitmq.latency = Date.now() - rabbitStart;
-    healthStatus.rabbitmq.error = error.message || "Unknown error";
+    healthStatus.rabbitmq.error = error.message || 'Unknown error';
     overallHealthStatus = 503;
   }
 
   // Final Response
   res.status(overallHealthStatus).json({
     timestamp: new Date().toISOString(),
-    overallStatus: overallHealthStatus === 200 ? "Healthy" : "Unhealthy",
+    overallStatus: overallHealthStatus === 200 ? 'Healthy' : 'Unhealthy',
     services: healthStatus,
     responseTime: Date.now() - startTime,
   });

@@ -8,7 +8,9 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "log": "node src/logService/index.js",
-    "devLog": "nodemon src/logService/index.js"
+    "devLog": "nodemon src/logService/index.js",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix"
   },
   "author": "chiradev",
   "license": "ISC",
@@ -22,10 +24,15 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.2",
     "node-cron": "^3.0.3",
-    "tiny-uid": "^1.1.2"
+    "swagger-ui-express": "^5.0.1",
+    "tiny-uid": "^1.1.2",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.18.0",
     "dotenv": "^16.4.7",
+    "eslint": "^9.18.0",
+    "globals": "^15.14.0",
     "nodemon": "^3.1.9"
   }
 }

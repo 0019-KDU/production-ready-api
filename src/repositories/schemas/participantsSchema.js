@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { PARTICIPANTS_ROLE } from "../../constants.js";
+import mongoose from 'mongoose';
+import { PARTICIPANTS_ROLE } from '../../constants.js';
 
 const participantSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -14,5 +14,5 @@ const participantSchema = new mongoose.Schema({
   },
 });
 
-const Participants = mongoose.model("Participants", participantSchema);
+const Participants = mongoose.model('Participants', participantSchema);
 export default Participants;

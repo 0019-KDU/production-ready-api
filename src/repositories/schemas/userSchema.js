@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
-import { USER_ROLE, DEFAULT_USER_ROLE } from "../../constants.js";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import mongoose from 'mongoose';
+import { USER_ROLE, DEFAULT_USER_ROLE } from '../../constants.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -25,8 +25,8 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.pre("save", async function (next) {
-  if (this.isModified("password")) {
+userSchema.pre('save', async function (next) {
+  if (this.isModified('password')) {
     this.password = await bcrypt.hash(this.password, 10);
   }
   next();
@@ -40,7 +40,7 @@ userSchema.methods.generateAuthToken = function () {
   return jwt.sign(
     { id: this._id, userId: this.userId },
     process.env.JWT_TOKEN,
-    { expiresIn: "1h" }
+    { expiresIn: '1h' }
   );
 };
 
@@ -52,5 +52,5 @@ userSchema.methods.verifyAuthToken = function (token) {
   }
 };
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model('User', userSchema);
 export default User;

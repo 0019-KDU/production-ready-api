@@ -1,0 +1,163 @@
+openapi: 3.0.0
+info:
+  title: API Documentation
+  version: 1.0.0
+  description: API for managing participants
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Participant:
+      type: object
+      required:
+        - name
+        - age
+        - role
+      properties:
+        name:
+          type: string
+          description: Name of the participant
+          example: John Doe
+        age:
+          type: integer
+          description: Age of the participant
+          example: 25
+        role:
+          type: string
+          description: Role of the participant
+          enum:
+            - Actor
+            - Director
+            - Producer
+          example: Actor
+
+paths:
+  /participants:
+    get:
+      summary: Get all participants
+      description: Retrieve a list of all participants
+      tags:
+        - Participants
+      responses:
+        200:
+          description: A list of participants
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Participant"
+        500:
+          description: Internal server error
+    post:
+      summary: Create a new participant
+      description: Create a new participant with the provided data
+      tags:
+        - Participants
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Participant"
+      responses:
+        201:
+          description: Participant created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Participant"
+        400:
+          description: Bad request, Invalid or missing parameters
+        401:
+          description: Unauthorized. JWT token is missing or invalid
+        500:
+          description: Internal server error
+  /participants/{id}:
+    get:
+      summary: Get a participant by ID
+      description: Retrieve a participant by their ID
+      tags:
+        - Participants
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the participant
+      responses:
+        200:
+          description: Participant found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Participant"
+        404:
+          description: Participant not found
+        500:
+          description: Internal server error
+    put:
+      summary: Update a participant by ID
+      description: Update a participant by their ID with the provided data
+      tags:
+        - Participants
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the participant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Participant"
+      responses:
+        200:
+          description: Participant updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Participant"
+        400:
+          description: Bad request, Invalid or missing parameters
+        401:
+          description: Unauthorized. JWT token is missing or invalid
+        404:
+          description: Participant not found
+        500:
+          description: Internal server error
+    delete:
+      summary: Delete a participant by ID
+      description: Delete a participant by their ID
+      tags:
+        - Participants
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the participant
+      responses:
+        204:
+          description: Participant deleted successfully
+        401:
+          description: Unauthorized. JWT token is missing or invalid
+        404:
+          description: Participant not found
+        500:
+          description: Internal server error

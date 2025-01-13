@@ -1,4 +1,4 @@
-import { rateLimit } from "express-rate-limit";
+import { rateLimit } from 'express-rate-limit';
 
 export const rateLimiter = rateLimit({
   windowMs: 1000 * 60,
@@ -6,6 +6,6 @@ export const rateLimiter = rateLimit({
   handler: (req, res, next) => {
     res
       .status(429)
-      .json({ message: "Too many requests, please try again later" });
+      .json({ message: 'Too many requests, please try again later' });
   },
 });

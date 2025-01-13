@@ -1,4 +1,4 @@
-import Log from "./schemas/logSchema.js";
+import Log from './schemas/logSchema.js';
 
 export const createLog = async (logData) => {
   const log = new Log(logData);

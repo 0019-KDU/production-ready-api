@@ -15,6 +15,10 @@ import { connectRabbitMQ } from "./config/rabbitMQ.js";
 
 import { removeResHeaders } from "./middlewares/removeResHeaders.js";
 import { logMsg } from "./lib/logProducer.js";
+import swaggerUi from "swagger-ui-express";
+import YAML from "yamljs";
+
+const swaggerDocument = YAML.load("./swagger.yml");
 
 const app = express();
 
@@ -26,6 +30,8 @@ app.use((req, res, next) => {
   req.logId = uid(7);
   next();
 });
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get("/healthCheck", checkHealthStatus);
 

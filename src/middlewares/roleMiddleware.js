@@ -1,11 +1,11 @@
 const rolePermission = {
-  guest: ["read"],
-  moderator: ["read", "create", "update"],
-  admin: ["read", "create", "update", "delete"],
+  guest: ['read'],
+  moderator: ['read', 'create', 'update'],
+  admin: ['read', 'create', 'update', 'delete'],
 };
 
 export const checkPermission = (requiredPermission) => (req, res, next) => {
-  const userRole = req?.user?.role ?? "";
+  const userRole = req?.user?.role ?? '';
   if (
     rolePermission[userRole?.toLowerCase()].includes(
       requiredPermission?.toLowerCase()
@@ -16,5 +16,5 @@ export const checkPermission = (requiredPermission) => (req, res, next) => {
 
   return res
     .status(403)
-    .json({ message: "Forbidden:You do not have required permissions" });
+    .json({ message: 'Forbidden:You do not have required permissions' });
 };

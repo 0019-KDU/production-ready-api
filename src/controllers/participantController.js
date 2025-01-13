@@ -1,60 +1,60 @@
-import express, { Router } from "express";
+import express, { Router } from 'express';
 import {
   getParticipants,
   createParticipant,
   getParticipantById,
   updateParticipant,
   deleteParticipant,
-} from "../services/participantsService.js";
+} from '../services/participantsService.js';
 
-import { authMiddleware } from "../middlewares/authMiddleware.js";
-import { checkPermission } from "../middlewares/roleMiddleware.js";
-import { body } from "express-validator";
-import { handleValidationError } from "../middlewares/validationErrorMiddleware.js";
+import { authMiddleware } from '../middlewares/authMiddleware.js';
+import { checkPermission } from '../middlewares/roleMiddleware.js';
+import { body } from 'express-validator';
+import { handleValidationError } from '../middlewares/validationErrorMiddleware.js';
 
 const validateParticipantData = [
-  body("name")
+  body('name')
     .isString()
     .trim()
     .notEmpty()
-    .withMessage("Name must be a string"),
-  body("age").isInt({ min: 0 }).withMessage("Age must be a Integer"),
-  body("role")
+    .withMessage('Name must be a string'),
+  body('age').isInt({ min: 0 }).withMessage('Age must be a Integer'),
+  body('role')
     .isIn([
-      "Producer",
-      "Actor",
-      "Director",
-      "Musician",
-      "Writer",
-      "Cinematographer",
+      'Producer',
+      'Actor',
+      'Director',
+      'Musician',
+      'Writer',
+      'Cinematographer',
     ])
-    .withMessage("Invalid role"),
+    .withMessage('Invalid role'),
 ];
 
 const router = express.Router();
 
-router.get("/", getParticipants);
-router.get("/:id", getParticipantById);
+router.get('/', getParticipants);
+router.get('/:id', getParticipantById);
 router.post(
-  "/",
+  '/',
   authMiddleware,
   validateParticipantData,
   handleValidationError,
-  checkPermission("create"),
+  checkPermission('create'),
   createParticipant
 );
 router.put(
-  "/:id",
+  '/:id',
   authMiddleware,
   validateParticipantData,
   handleValidationError,
-  checkPermission("update"),
+  checkPermission('update'),
   updateParticipant
 );
 router.delete(
-  "/:id",
+  '/:id',
   authMiddleware,
-  checkPermission("delete"),
+  checkPermission('delete'),
   deleteParticipant
 );
 

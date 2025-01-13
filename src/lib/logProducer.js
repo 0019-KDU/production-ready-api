@@ -1,5 +1,5 @@
-import { channel } from "../config/rabbitMQ.js";
-import { LOG_QUEUE } from "../constants.js";
+import { channel } from '../config/rabbitMQ.js';
+import { LOG_QUEUE } from '../constants.js';
 
 const publishLog = (logId, logMessage, logObject, type) => {
   const log = {
@@ -13,9 +13,9 @@ const publishLog = (logId, logMessage, logObject, type) => {
 };
 
 export const logMsg = (logId, logMessage, logObject) => {
-  publishLog(logId, logMessage, logObject, "log");
+  publishLog(logId, logMessage, logObject, 'log');
 };
 
 export const logError = (logId, logError, logObject) => {
-  publishLog(logId, logError, logObject, "error");
+  publishLog(logId, logError, logObject, 'error');
 };

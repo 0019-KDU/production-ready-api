@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const logSchema = new mongoose.Schema({
   logId: {
@@ -22,6 +22,6 @@ const logSchema = new mongoose.Schema({
   },
 });
 
-const Log = mongoose.model("Log", logSchema);
+const Log = mongoose.model('Log', logSchema);
 
 export default Log;

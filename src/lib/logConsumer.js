@@ -1,8 +1,8 @@
-import { channel, connectRabbitMQ } from "../config/rabbitMQ.js";
-import { LOG_QUEUE, LOG_DB_NAME } from "../constants.js";
+import { channel, connectRabbitMQ } from '../config/rabbitMQ.js';
+import { LOG_QUEUE, LOG_DB_NAME } from '../constants.js';
 
-import connect from "../config/db.js";
-import { createLog } from "../repositories/logRepository.js";
+import connect from '../config/db.js';
+import { createLog } from '../repositories/logRepository.js';
 
 export const startLogConsumer = async () => {
   await connect(LOG_DB_NAME);
@@ -16,4 +16,4 @@ export const startLogConsumer = async () => {
   });
 };
 
-startLogConsumer().catch((error) => console.error("faild to consume queue"));
+startLogConsumer().catch((error) => console.error('faild to consume queue'));
